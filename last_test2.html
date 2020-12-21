@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>기말과제</title>
+        <meta charset="utf-8" />
+        <style>
+            html{
+                overflow-y: scroll;
+            }
+            .wrap{
+                min-width: 720px;
+                max-width: 1920px;
+                margin: 0px auto;
+            }
+            .clearfix::after{
+                content: "";
+                clear: both;
+                display: table;
+            }
+            header{
+                background-color: rgb(182, 13, 13);
+                position: relative;
+                z-index: 1;
+            }
+            header h1{
+                float: left;
+                height: 35px;
+                margin: 10px 50px;
+            }
+            header nav{
+                float: right;
+            }
+            header nav>ul{
+                padding: 0px;
+                margin: 0px;
+            }
+            header nav>ul>li{
+                float: left;
+                list-style: none;
+                padding: 20px 0px;
+                height: 25px;
+                width: 160px;
+                text-align: center;
+            }
+            header nav>ul>li:hover{
+                background-color: rgb(5, 110, 5);
+                color: white;
+            }
+            header nav>ul>li:hover .sub_nav{
+                background-color: white;
+                display: block;
+            }
+            .sub_nav{
+                padding: 10px;
+                margin: 25px 0px 0px 0px;
+                width: 140px;
+                display: none;
+            }
+            .sub_nav li{
+                list-style: none;
+                color: black;
+            }
+            #main_visual{
+                position: relative;
+                overflow: hidden;
+            }
+            #visual_container{
+                position: absolute;
+                width: 400%;
+                transition: left 1s;
+            }
+            .left_0{
+                left: 0%;
+            }
+            .left_1{
+                left: -100%;
+            }
+            .left_2{
+                left: -200%;
+            }
+            .visual_content{
+                float: left;
+                width: 25%;
+            }
+            .visual_content img{
+                width: 100%;
+                display: block;
+            }
+            .button{
+                cursor: pointer;
+            }
+            .black_back{
+                background-color:rgb(5, 110, 5);
+                color: white;
+                text-align: center;
+                padding: 10px;
+            }
+            .black_back span{
+                padding: 10px;
+            }
+            .parallax_block{
+                transition: opacity 1s, margin 1s;
+                opacity: 0;
+                margin-top: 100px;
+            }
+            .active{
+                opacity: 1;
+                margin-top: 0px;
+            }
+            .parallax_block div{
+                float: left;
+            }
+            .parallax_block:nth-child(2) div{
+                float: right;
+            }
+            .block_left{
+                width: calc(40% - 40px);
+                padding: 20px;
+            }
+            .block_left img{
+                width: 100%;
+            }
+            .block_right{
+                width: calc(60% - 40px);
+                padding: 20px;
+            }
+            .block-right p{
+                margin: 0px;
+            }
+            .dimmed{
+                width: 100vw;
+                height: 100vh;
+                background-color:rgba(0,0,0,0.3);
+                position: fixed;
+                top:0px;
+                left: 0px;
+                z-index: 10;
+                display: none;
+            }
+            .dimmed_active{
+                display: block;
+            }
+            .dimmed img{
+                display: block;
+                width: 90%;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            footer{
+                height: 200px;
+                background-color: rgb(182, 13, 13);
+                color: white;
+                text-align:center;
+            }
+        </style>
+        <script>
+            var main_visual;
+            var visual_container;
+            window.onload = function(){
+                console.log("load complete"); 
+                main_visual = document.getElementById("main_visual");
+                visual_container = document.getElementById("visual_container");
+                console.log(main_visual);
+                console.log(visual_container);
+                console.log(visual_container.style.height);
+                console.log(visual_container.offsetHeight);
+                main_visual.style.height = visual_container.offsetHeight+"px";
+                window.onresize = function(){
+                    main_visual.style.height = visual_container.offsetHeight+"px";
+                }
+            }
+            var current_page = 0;
+            function setPage(index){
+                console.log("setPage:"+index);
+                console.log(visual_container);
+                visual_container.classList.remove("left_0");
+                visual_container.classList.remove("left_1");
+                visual_container.classList.remove("left_2");
+                visual_container.classList.add("left_"+index);
+                current_page = index;
+            }
+            function goLeft(){
+                current_page -= 1;
+                if(current_page < 0)current_page = 0;
+                setPage(current_page);
+            }
+            function goRight(){
+                current_page += 1;
+                if(current_page > 2)current_page = 2;
+                setPage(current_page);
+            }
+
+            function change_scroll(){
+                console.log(document.documentElement.scrollTop);
+                var scroll_center = document.documentElement.scrollTop + window.innerHeight/2;
+                var blocks = document.getElementsByClassName("parallax_block");
+                for(var i=0; i<blocks.length; i++){
+                    if(blocks[i].offsetTop < scroll_center){
+                        blocks[i].classList.add("active");
+                    }else{
+                        blocks[i].classList.remove("active");
+                    }
+                }
+                if(document.documentElement.scrollTop >= document.documentElement.scrollHeight - document.documentElement.scrollHeight - 30){
+                    for(var j=0; j<blocks.lenght; j++){
+                        blocks[j].classList.add("active");
+                    }
+                }
+            }
+
+            function dimmedOff(index){
+                var dimmedDIV = document.getElementsByClassName("dimmed");
+                dimmedDIV[index].classList.remove("dimmed_active");
+            }
+            function dimmedOn(index){
+                var dimmedDIV = document.getElementsByClassName("dimmed");
+                dimmedDIV[index].classList.add("dimmed_active");
+            }
+        </script>
+    </head>
+    <body onscroll="change_scroll()">
+        <div class="wrap">
+            <header class="clearfix">
+                <h1>Merry Christmas</h1>
+                <nav>
+                    <ul class="clearfix">
+                        <li>christmas
+                            <ul class="sub_nav">
+                                <li>introduce</li>
+                                <li>event</li>
+                                <li>other</li>
+                            </ul>
+                        </li>
+                        <li>contents
+                            <ul class="sub_nav">
+                                <li>movie</li>
+                                <li>novel</li>
+                            </ul>
+                        </li>
+                        <li>more
+                            <ul class="sub_nav">
+                                <li></li>
+                                <li>sns</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <div id="main_visual">
+                <div id="visual_container" class="clearfix left_0">
+                    <div class="visual_content"><img src="last_image/christmas-snowman.jpg"/></div>
+                    <div class="visual_content"><img src="last_image/7ucwd-TWSE6PQ8ZPH-Full-Image_GalleryBackground-en-US-1583342948536._RI_.jpg"/></div>
+                    <div class="visual_content"><img src="last_image/https___www.history.com_.image_MTY4OTA4MzI0ODc4NjkwMDAw_christmas-tree-gettyimages-1072744106.jpg"/></div>
+                </div>
+            </div>
+            <div class="black_back">
+                <span class="button" onclick="goLeft();">◀︎</span>
+                <span class="button" onclick="setPage(0)">page1</span>
+                <span class="button" onclick="setPage(1)">page2</span>
+                <span class="button" onclick="setPage(2)">page3</span>
+                <span class="button" onclick="goRight();">►</span>
+            </div>
+            <div id="parallax_section">
+                <div class="parallax_block clearfix">
+                    <div class="block_left">
+                        <img src="last_image/maxresdefault.jpg" onclick="dimmedOn(0)"/>
+                    </div>
+                    <div class="block_right">
+                        <p>
+                            크리스마스 연대기 <br><br>
+                            아빠가 돌아가신 후 엄마는 야간근무하러 나가고 오빠는 컸다고 함께 놀아주지도 않아 쓸쓸한 크리스마스를 맞이한 케이티는 매해 크리스마스마다 찍었던 비디오를 돌려보다가 우연히 산타 할아버지의 단서를 발견한다. 마침내 산타와 만나게 되어 기뻐하는 것도 잠시 대형사고를 치게 되면서 크리스마스를 살리기 위한, 지구의 평화까지 지키기 위해 모험에 동참한다.
+                        </p>
+                    </div>
+                </div>
+                <div class="parallax_block clearfix">
+                    <div class="block_left">
+                        <img src="last_image/9951FC485C0DAE1732.jfif" onclick="dimmedOn(1)"/>
+                    </div>
+                    <div class="block_right">
+                        <p>
+                            폴라 익스프레스 <br><br>
+                            하얀 눈이 수북이 쌓인 크리스마스 이브, 잠에서 깬 소년에게 천둥소리를 내는 거대한 기관차, 북극행 특급열차 폴라 익스프레스가 나타난다. 산타를 믿지 않는 소년은 신비한 북극 여행을 통해 잃어버렸던 꿈과 동심을 되찾게 된다.
+                        </p>
+                    </div>
+                </div>
+                <div class="parallax_block clearfix">
+                    <div class="block_left">
+                        <img src="last_image/unnamed.jpg" onclick="dimmedOn(2)"/>
+                    </div>
+                    <div class="block_right">
+                        <p>
+                            배드 맘스 크리스마스 <br><br>
+                            일도 하랴 애들도 돌보랴, 학교 자원봉사까지 아침부터 저녁까지 동분서주하다 지치기 일쑤인 엄마들. 그렇다고 고맙다는 말은커녕 돌아오는 건 그녀를 비판하는 시선들뿐. 게다가 의지해야 할 남편은 그냥 원수다. 이에 참다 못한 에이미와 학교에서 만난 엄마 키키, 칼라와 함께 파업 선언을 한다.
+
+속편 '배드 맘스 크리스마스'에서는 크리스마스를 맞이한 배드 맘 에이미, 키키, 칼라에게 지나치게 매섭거나, 지나치게 집착하거나, 지나치게 자유로운 배드 맘의 배드 맘이 찾아와 크리스마스의 악몽을 선사한다.
+                        </p>
+                    </div>
+                </div>    
+            </div>
+            <div class="dimmed" onclick="dimmedOff(0)">
+                <img src="image/bas10.jpg"/>
+            </div>
+            <div class="dimmed" onclick="dimmedOff(1)">
+                <img src="image/bas11.jpg"/>
+            </div>
+            <div class="dimmed" onclick="dimmedOff(2)">
+                <img src="image/bas12.jpg"/>
+            </div>
+            <footer>
+                <div>copyright google</div>
+            </footer>
+        </div>
+    </body>
+</html>
